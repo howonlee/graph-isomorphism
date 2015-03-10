@@ -1,6 +1,7 @@
 import networkx as nx
 import operator
-import cPickle
+import collections
+import hashlib
 
 def degrees(net):
     degree_dict = {}
@@ -20,5 +21,20 @@ def degree_neighborhoods(net, degree_dict):
         #neighbor_dict[node] = len(neighbor_dict[node])
     return neighbor_dict
 
+def stick(ls):
+    return ",".join(map(str,ls))
+
+def hash_degn(deg_n):
+    hashes = []
+    m = hashlib.md5()
+    for _, val in deg_n.iteritems():
+        m.update(stick(val))
+        hashes.append(m.digest())
+    col = collections.Counter(hashes)
+    for key, val in col.most_common():
+        print val
+
 if __name__ == "__main__":
-    pass
+    net = nx.barabasi_albert_graph(200,4)
+    deg = degrees(net)
+    deg_n = degree_neighborhoods(net, deg)
