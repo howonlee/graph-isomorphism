@@ -2,6 +2,7 @@ import networkx as nx
 import operator
 import collections
 import hashlib
+import matplotlib.pyplot as plt
 
 def degrees(net):
     degree_dict = {}
@@ -22,7 +23,10 @@ def degree_neighborhoods(net, degree_dict):
     return neighbor_dict
 
 def stick(ls):
-    return ",".join(map(str,ls))
+    """
+    Stick them together, right? right? ... that's a joke
+    """
+    return ",".join(map(str,sorted(ls)))
 
 def hash_degn(deg_n):
     """
@@ -46,8 +50,14 @@ def reverse_node_labels(net1):
         net2.add_edge(len_nodes - 1 - node_a, len_nodes - 1 - node_b)
     return net2
 
+def plot_deg_neighborhood_sum(deg_n):
+    deg_n_sums = sorted([sum(x[1]) for x in deg_n.items()], reverse=True)
+    plt.loglog(deg_n_sums)
+    plt.show()
+
 if __name__ == "__main__":
     net1 = nx.barabasi_albert_graph(6000,15)
     net2 = reverse_node_labels(net1)
-    deg = degrees(net2)
-    deg_n = degree_neighborhoods(net2, deg)
+    deg = degrees(net1)
+    deg_n = degree_neighborhoods(net1, deg)
+    #print deg_n
