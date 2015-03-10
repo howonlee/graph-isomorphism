@@ -20,32 +20,5 @@ def degree_neighborhoods(net, degree_dict):
         #neighbor_dict[node] = len(neighbor_dict[node])
     return neighbor_dict
 
-def load_word_mapping(name, rev=True):
-    mapping = {}
-    with open(name, "rb") as pickle_file:
-        mapping = cPickle.load(pickle_file)
-    if rev:
-        mapping = {v: k for k, v in mapping.iteritems()}
-    return mapping
-
 if __name__ == "__main__":
-    #just different ordering problems....
-    net1 = nx.read_edgelist("./first_net.edgelist")
-    net2 = nx.read_edgelist("./second_net.edgelist")
-    deg1 = degrees(net1)
-    deg2 = degrees(net2)
-    deg_neigh1 = reversed(sorted(degree_neighborhoods(net1, deg1).items(), key=operator.itemgetter(1)))
-    deg_neigh2 = reversed(sorted(degree_neighborhoods(net2, deg2).items(), key=operator.itemgetter(1)))
-    mapping_1 = load_word_mapping("first_dict.pickle")
-    mapping_2 = load_word_mapping("second_dict.pickle")
-    sample_1 = map(lambda x: mapping_1[int(x[0])], deg_neigh1)
-    sample_2 = map(lambda x: mapping_2[int(x[0])], deg_neigh2)
-    samples = zip(sample_1, sample_2)
-    samples = samples[:400]
-    for member in samples:
-        print "%10s\t%10s" % member
-    #print samples[:100]
-    #filtered_samples = filter(lambda x: x[0] == x[1], samples)
-    #print filtered_samples
-    #print len(filtered_samples)
-
+    pass
