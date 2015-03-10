@@ -25,6 +25,9 @@ def stick(ls):
     return ",".join(map(str,ls))
 
 def hash_degn(deg_n):
+    """
+    Check that a model doesn't fuck us over here
+    """
     hashes = []
     m = hashlib.md5()
     for _, val in deg_n.iteritems():
@@ -32,9 +35,11 @@ def hash_degn(deg_n):
         hashes.append(m.digest())
     col = collections.Counter(hashes)
     for key, val in col.most_common():
-        print val
+        if val > 1:
+            print "what the fuck"
 
 if __name__ == "__main__":
-    net = nx.barabasi_albert_graph(200,4)
+    net = nx.barabasi_albert_graph(6000,15)
     deg = degrees(net)
     deg_n = degree_neighborhoods(net, deg)
+    hash_degn(deg_n)
