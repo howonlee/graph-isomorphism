@@ -3,6 +3,7 @@ import operator
 import collections
 import hashlib
 import matplotlib.pyplot as plt
+import word_graphs
 
 def degrees(net):
     degree_dict = {}
@@ -55,17 +56,36 @@ def plot_deg_neighborhood_sum(deg_n):
     plt.loglog(deg_n_sums)
     plt.show()
 
+def plot_degs(net):
+    deg_seq = sorted(nx.degree(net).values(), reverse=True)
+    plt.loglog(deg_seq)
+    plt.title("seq of degs")
+    plt.show()
+
 if __name__ == "__main__":
-    net1 = nx.barabasi_albert_graph(6000,15)
+    with open("corpus.txt", "r") as corpus_file:
+        words = corpus_file.read().split()
+        words1, words2 = words[:580596], words[580596:]
+        map1 = word_graphs.word_mapping(words1)
+        map2 = word_graphs.word_mapping(words2)
+        net1 = word_graphs.word_net(words1, map1)
+        net2 = word_graphs.word_net(words2, map2)
+    #standard dot product distance? for great justice?
+    flipmap1 = {v:k for (k, v) in map1.iteritems()}
+    flipmap2 = {v:k for (k, v) in map2.iteritems()}
+    #net1 = nx.barabasi_albert_graph(6000,15)
     #net2 = reverse_node_labels(net1)
-    net2 = nx.barabasi_albert_graph(6000,15)
+    #net2 = nx.barabasi_albert_graph(6000,15)
     deg1 = degrees(net1)
     deg2 = degrees(net2)
     deg_n1 = degree_neighborhoods(net1, deg1)
     deg_n2 = degree_neighborhoods(net2, deg2)
     #sum maybe not
-    deg_n1_sums = sorted([sum(x[1]) for x in deg_n1.items()], reverse=True)
-    deg_n2_sums = sorted([sum(x[1]) for x in deg_n2.items()], reverse=True)
-    deg_n1s = [x[0] for x in sorted(deg_n1.items(), key=lambda x: stick(x[1]))]
-    deg_n2s = [x[0] for x in sorted(deg_n2.items(), key=lambda x: stick(x[1]))]
-    print zip(deg_n1s, deg_n2s)
+    #deg_n1_sums = sorted([sum(x[1]) for x in deg_n1.items()], reverse=True)
+    #deg_n2_sums = sorted([sum(x[1]) for x in deg_n2.items()], reverse=True)
+    deg_n1s = [(flipmap1[x[0]],x[1]) for x in sorted(deg_n1.items(), key=lambda x: stick(x[1]))]
+    deg_n2s = [(flipmap2[x[0]],x[1]) for x in sorted(deg_n2.items(), key=lambda x: stick(x[1]))]
+    zipped = zip(deg_n1s, deg_n2s)
+    for x in zipped:
+        #line by line folks
+        print x
