@@ -75,14 +75,18 @@ def load_corpus():
         flipmap2 = {v:k for (k, v) in map2.iteritems()}
     return net1, net2, map1, map2, flipmap1, flipmap2
 
-def load_degs(net1, net2)
+def load_degs(net1, net2, flipmap1, flipmap2):
     deg1 = degrees(net1)
     deg2 = degrees(net2)
     deg_n1 = degree_neighborhoods(net1, deg1)
     deg_n2 = degree_neighborhoods(net2, deg2)
-    deg_n1s = [(flipmap1[x[0]],x[1]) for x in sorted(deg_n1.items(), key=lambda x: stick(x[1]))]
-    deg_n2s = [(flipmap2[x[0]],x[1]) for x in sorted(deg_n2.items(), key=lambda x: stick(x[1]))]
+    deg_n1s = [(flipmap1[x[0]],x[1]) for x in sorted(deg_n1.items(), key=operator.itemgetter(1))]
+    deg_n2s = [(flipmap2[x[0]],x[1]) for x in sorted(deg_n2.items(), key=operator.itemgetter(1))]
     return deg1, deg2, deg_n1, deg_n2, deg_n1s, deg_n2s
 
 if __name__ == "__main__":
-    pass
+    net1, net2, map1, map2, flipmap1, flipmap2 = load_corpus()
+    deg1, deg2, deg_n1, deg_n2, deg_n1s, deg_n2s = load_degs(net1, net2, flipmap1, flipmap2)
+    zipped = zip(deg_n1s, deg_n2s)
+    for member in zipped:
+        print map(operator.itemgetter(0), member)
