@@ -57,7 +57,15 @@ def plot_deg_neighborhood_sum(deg_n):
 
 if __name__ == "__main__":
     net1 = nx.barabasi_albert_graph(6000,15)
-    net2 = reverse_node_labels(net1)
-    deg = degrees(net1)
-    deg_n = degree_neighborhoods(net1, deg)
-    #print deg_n
+    #net2 = reverse_node_labels(net1)
+    net2 = nx.barabasi_albert_graph(6000,15)
+    deg1 = degrees(net1)
+    deg2 = degrees(net2)
+    deg_n1 = degree_neighborhoods(net1, deg1)
+    deg_n2 = degree_neighborhoods(net2, deg2)
+    #sum maybe not
+    deg_n1_sums = sorted([sum(x[1]) for x in deg_n1.items()], reverse=True)
+    deg_n2_sums = sorted([sum(x[1]) for x in deg_n2.items()], reverse=True)
+    deg_n1s = [x[0] for x in sorted(deg_n1.items(), key=lambda x: stick(x[1]))]
+    deg_n2s = [x[0] for x in sorted(deg_n2.items(), key=lambda x: stick(x[1]))]
+    print zip(deg_n1s, deg_n2s)
