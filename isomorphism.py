@@ -42,6 +42,7 @@ def hash_degn(deg_n):
     for key, val in col.most_common():
         if val > 1:
             print "what the fuck"
+    return col.most_common()
 
 def reverse_node_labels(net1):
     net2 = nx.Graph()
